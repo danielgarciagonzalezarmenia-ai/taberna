@@ -19,7 +19,12 @@ visibilidad + experien€ia entretenida (personitas trabajando).
 
 ## Estado
 
-Fase 0 (fundaciones) en curso. Sin codigo de produccion aun.
+- Fase 0 (fundaciones) ✓
+- Fase 1 (esqueleto): monorepo, Firebase SDK + Google Sign-In + functions + rules ✓
+- **Pendiente**: App Check (reCAPTCHA, anulado temporalmente), deploy a produccion,
+  capa de email con dominio real, vista de la oficina con agentes.
+
+Sin codigo de produccion desplegado aun.
 
 ## Comandos (cuando exista codigo)
 

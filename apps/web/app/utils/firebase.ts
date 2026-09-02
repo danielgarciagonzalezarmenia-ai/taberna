@@ -1,11 +1,6 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth, type User } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
-import {
-  initializeAppCheck,
-  ReCaptchaEnterpriseProvider,
-  type AppCheck,
-} from "firebase/app-check";
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY as string,
@@ -15,9 +10,6 @@ export const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID as string,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID as string,
 };
-
-export const reCAPTCHASiteKey =
-  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() || null;
 
 const isClient = typeof window !== "undefined";
 
@@ -31,21 +23,12 @@ function ensureApp(): FirebaseApp {
   }
   if (!app) {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    if (reCAPTCHASiteKey) {
-      initializeAppCheck(app, {
-        provider: new ReCaptchaEnterpriseProvider(reCAPTCHASiteKey),
-        isTokenAutoRefreshEnabled: true,
-      });
-    }
   }
   return app;
 }
 
 let authInstance: Auth | null = null;
 let dbInstance: Firestore | null = null;
-let appCheckInstance: AppCheck | null = null;
-
-// App Check NO se expone como instancia; queda registrada dentro de ensureApp.
 
 export function getFirebaseAuth(): Auth {
   if (!authInstance) {
@@ -62,5 +45,3 @@ export function getFirebaseDb(): Firestore {
 }
 
 export type { User };
-
-export const appCheckEnabled = reCAPTCHASiteKey !== null;

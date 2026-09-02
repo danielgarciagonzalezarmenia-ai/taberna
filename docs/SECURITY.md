@@ -22,6 +22,15 @@
 
 ## 3. Antiabuso (App Check)
 
+> **ESTADO ACTUAL: PENDIENTE.** Se anulo reCAPTCHA/App Check durante el
+> desarrollo por friccion de configuracion. Reactivar antes de produccion:
+> crear la site key de reCAPTCHA Enterprise, ponerla en
+> `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` (apps/web/.env.local) y activar
+> "Enforce all apps" en la consola. Hasta entonces:
+> - No abrir reglas de Firestore para compensar (mantener deny por defecto).
+> - Considerar rate limiting en Cloud Functions como mitigacion temporal.
+
+Objetivo (cuando se reactive):
 - **Firebase App Check**: verifica que el cliente es nuestra app real
   (certificacion / Play Integrity / reCAPTCHA) antes de permitir llamadas.
 - Rate limiting por usuario e IP en Cloud Functions.
