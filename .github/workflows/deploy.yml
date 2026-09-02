@@ -28,11 +28,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
-          cache-dependency-path: apps/web/package-lock.json
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (incl. optional native binaries)
+        run: npm install --include=optional --no-audit --no-fund
 
       # Config publica de Firebase (sin secretos; API key es publica por diseno).
       - name: Set Firebase public config
