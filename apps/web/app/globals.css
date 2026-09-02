@@ -1,41 +1,125 @@
 @import "tailwindcss";
 
+/* ============================================================
+   TABERNA — Design system replicado del lenguaje visual de
+   Resend (dark, acento magenta→violeta, serif display + Inter).
+   ============================================================ */
+
 :root {
-  --background: #0b0d10;
-  --foreground: #f4f6f8;
-  --text-muted: #9aa3ad;
-  --accent: #4f8cff;
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  --bg: #0a0a0a;
+  --bg-elev: #131316;
+  --bg-elev-2: #18181b;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.1);
+  --accent-magenta: #ec4899;
+  --accent-violet: #7c3aed;
+  --accent-grad: linear-gradient(120deg, #ec4899 0%, #8b5cf6 55%, #6366f1 100%);
+
+  --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-display), Georgia, "Times New Roman", serif;
+
+  --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-float: 0 30px 60px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-bgelev: var(--bg-elev);
+  --color-ink: var(--text-primary);
+  --color-mute: var(--text-secondary);
+  --color-accent-magenta: var(--accent-magenta);
+  --color-accent-violet: var(--accent-violet);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --color-accent: var(--accent);
-}
-
-/* Utilidades glass (design system, sin generico) */
-@utility shadow-float {
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.08) inset,
-    0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-@utility glass {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(140%);
+  --font-display: var(--font-display);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text-primary);
   font-family: var(--font-sans);
-  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Utilidades de marca */
+
+/* Texto con gradiente firma */
+@utility text-grad {
+  background-image: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Superficie elevada estilo Resend: negro+1, borde sutil, sombra difusa */
+@utility surface {
+  background-color: var(--bg-elev);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+/* Surface hover: eleva */
+@utility surface-hover {
+  transition: all 200ms ease;
+}
+
+.surface-hover:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-float);
+  transform: translateY(-1px);
+}
+
+/* Navbar glass */
+@utility navbar-glass {
+  background: rgba(10, 10, 10, 0.72);
+  backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Boton primario con gradiente (pill) */
+@utility btn-primary {
+  background-image: var(--accent-grad);
+  color: #fff;
+  border-radius: 9999px;
+  transition: all 200ms ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+/* Boton ghost */
+@utility btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: 9999px;
+  transition: all 200ms ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-strong);
+}
+
+/* Card de "email" de la oficina */
+@utility email-card {
+  background-color: var(--bg-elev);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* Avatar con gradiente */
+@utility avatar-grad {
+  background-image: var(--accent-grad);
 }
