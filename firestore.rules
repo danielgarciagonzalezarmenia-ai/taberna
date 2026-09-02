@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // DENY por defecto: todo acceso no especificado queda bloqueado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Perfil de usuario: solo su dueno.
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Verificaciones OTP: solo el dueno lee/escribe las suyas.
+    match /users/{uid}/verifications/{id} {
+      allow read, write, delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Tabernas (oficinas): el dueno y los miembros escribedirtos.
+    match /tabernas/{tabernaId} {
+      allow read: if request.auth != null
+        && (resource.data.ownerId == request.auth.uid
+            || (resource.data.memberIds is map && resource.data.memberIds[request.auth.uid] == true));
+      // Crear: el creador debe establecerse como owner.
+      allow create: if request.auth != null
+        && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if request.auth != null
+        && resource.data.ownerId == request.auth.uid;
+
+      // Agentes dentro de una taberna: mismos permisos que su taberna.
+      match /agentes/{agenteId} {
+        allow read: if request.auth != null
+          && (resource.data.ownerId == request.auth.uid
+              || (resource.data.memberIds is map && resource.data.memberIds[request.auth.uid] == true));
+        allow create, update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+      }
+    }
+  }
+}
