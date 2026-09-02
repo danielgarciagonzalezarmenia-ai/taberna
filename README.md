@@ -21,10 +21,11 @@ visibilidad + experien€ia entretenida (personitas trabajando).
 
 - Fase 0 (fundaciones) ✓
 - Fase 1 (esqueleto): monorepo, Firebase SDK + Google Sign-In + functions + rules ✓
-- **Pendiente**: App Check (reCAPTCHA, anulado temporalmente), deploy a produccion,
-  capa de email con dominio real, vista de la oficina con agentes.
+- **Pausado**: email (sin dominio/gasto; ver docs/EMAIL.md).
+- **Pendiente**: App Check (anulado temporalmente), deploy a produccion,
+  la vista de la oficina con agentes (Fase 3).
 
-Sin codigo de produccion desplegado aun.
+La web corre en local (`npm run dev`) lista para probar login.
 
 ## Comandos (cuando exista codigo)
 

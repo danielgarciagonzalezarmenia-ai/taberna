@@ -1,19 +1,25 @@
-# TABERNA — Capa de Email (Gmail/Workspace)
+# TABERNA — Capa de Email
 
-> Metas: codigos de verificacion (OTP), notificaciones transaccionales (agentes
-> que terminan/necesitan accion) y marketing para registrados. **Sin este
-> documento nos bloquean como spam** y "fallamos" en produccion.
+> **ESTADO ACTUAL: PAUSADA/SIN IMPLEMENTAR (decidido 2026-09).**
+> Se elimino la integracion de email (Gmail API y Resend) del codebase.
+> Sin dominio propio y sin gasto, no hay envio confiable ni marketing.
+> Este documento queda como referencia para cuando se retome.
 
-## 1. Proveedor
+## Para retomar (cuando haya dominio + presupuesto)
 
-- Opcion A (recomendada): **Google Workspace** + API Gmail para envio desde el
-  dominio propio (`hola@taberna.app`). Mejor reputacion que gmail.com libre.
-- Opcion B: servicio transaccional/marketing (SendGrid/Resend) si necesitamos
-  volumen alto de marketing separado.
-- Decision: separar **transaccional** (SIEMPRE de dominio propio) de
-  **marketing** (con proceso de opt-in y baja).
+- **Opcion recomendada:** Resend (gratis 3000/mes) + dominio propio con SPF/DKIM/DMARC.
+  Correcto para transaccional (OTP, notificaciones) Y marketing.
+- **Opcion transitoria (NO para marketing):** Gmail API vía app de Google con OAuth.
+  Limite ~500 destinatarios/dia; token en servidor con refresh + endpoint de auth.
 
-## 2. Tipos de email y reglas
+## Requisitos para no caer en spam (CRITICO al retomar)
+
+- Dominio propio verificado en Resend (SPF, DKIM, DMARC en el DNS).
+- NO usar gmail.com personal para marketing (viola ToS, te frenan la cuenta).
+- Opt-in separado para marketing + baja en 1 clic (ver PRIVACY.md).
+- Rate limits por usuario y manejo de bounces/quejas.
+
+## Tipos de email planeados
 
 | Tipo | Cuando | Regla anti-spam |
 |------|--------|-----------------|
@@ -21,29 +27,10 @@
 | Notificacion agente | tarea termina / necesita aprobacion | transaccional, derecho a baja |
 | Marketing | ofertas / novedades | SOLO con opt-in explicito, baja en 1 clic |
 
-## 3. Autenticacion de dominio (imprescindible)
+## Pendiente al retomar
 
-- Configurar **SPF**, **DKIM** y **DMARC** de `taberna.app` en el DNS.
-- Falta de SPF/DKIM = emails van a spam o se rechazan. Esto ES el paso que
-  "hace fallar" si se salta.
-
-## 4. Limites y reputacion
-
-- Empezar con volumen bajo y subir gradualmente (amplificacion de calentamiento).
-- Rate limit por usuario (evitar enviar docenas en minutos).
-- Procesamiento de **bounces/quejas** (complaints) en vez de ignorarlos.
-- No importar listas compradas; ALTA CONSENTIDO.
-
-## 5. Plantillas (estructura)
-
-- Verificacion: 1 texto corto + enlace/boton + codigo + expiracion.
-- Notificacion agente: asunto claro ("tu agente X termino"), resumen + accion.
-- Marketing: disenado (HTML), footer con datos de contacto + baja legible.
-
-## 6. Pendientes de implementacion (FASE 1.5)
-
-- [ ] Crear dominio + DNS (SPF/DKIM/DMARC).
-- [ ] Servicio de envio configurado y probado (no a spam).
-- [ ] Plantillas y prueba en varios clientes (Gmail, Outlook, moviles).
+- [ ] Comprar dominio (~$10/año) o usar Resend de prueba (solo dev).
+- [ ] Crear cuenta Resend, verificar dominio (SPF/DKIM/DMARC).
+- [ ] Guardar API key en variables del backend (nunca en el repo).
+- [ ] Reescribir la capa de email (sendEmail + plantillas).
 - [ ] Rate limits y manejo de bounces.
-- [ ] Logs de envio sin PII.
